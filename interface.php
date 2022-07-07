@@ -1,15 +1,19 @@
 <?php
 
+interface InfoProduk{
+    public function getInfoProduk();
+}
+
 //class yg tidak bisa dijadikan objek
 
 abstract class Produk{
 
-    private $judul,
+    protected $judul,
             $penulis,
             $penerbit,
             $diskon = 0;
 
-    private $harga;
+    protected $harga;
     
     public function __construct($judul = "judul", $penulis = "penulis", $penerbit="penerbit", $harga=0
     )
@@ -59,14 +63,9 @@ abstract class Produk{
         return "$this->penulis, $this->penerbit";
     }
 
-    abstract public function getInfoProduk();
+    abstract public function getInfo();
 
-    public function getInfo()
-    {
-        $str = "{$this->judul} | {$this->getLabel()} (Rp. {$this->harga})";
-        return $str;
-    }
-
+    
     public function getHarga()
     {
         return $this->harga - ($this->harga * $this->diskon/100);
@@ -106,9 +105,15 @@ class Komik extends Produk
         $str = "Komik : ". $this->getInfo() ." - {$this->jmlHalaman} Halaman";
         return $str;
     }
+
+    public function getInfo()
+    {
+        $str = "{$this->judul} | {$this->getLabel()} (Rp. {$this->harga})";
+        return $str;
+    }
 }
 
-class Game extends Produk
+class Game extends Produk implements InfoProduk
 {
     public $waktuMain;
 
@@ -123,6 +128,12 @@ class Game extends Produk
     public function getInfoProduk()
     {
         $str = "Game : ". $this->getInfo() ." ~ {$this->waktuMain} Jam";
+        return $str;
+    }
+
+    public function getInfo()
+    {
+        $str = "{$this->judul} | {$this->getLabel()} (Rp. {$this->harga})";
         return $str;
     }
 }
